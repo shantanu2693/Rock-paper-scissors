@@ -1,95 +1,83 @@
+
+let playerScore = 0;
+let computerScore = 0;
+
+let playerSelection = "";
+let computerSelection = "";
+    
+playRound();
+
 function getComputerChoice() {
     let a = Math.floor (Math.random()*3);
     if (a < 1) {
-        return ("rock");
+        return ("Rock");
     }
     else if (a < 2) {
-        return ("paper");
+        return ("Paper");
     }
     else if (a < 3) {
-        return ("scissor");
+        return ("Scissor");
     }
     else {
         return ("error");
     }
 }
 
-function getUserChoice() {
-    let choice = prompt("Enter your choice", "Rock, Paper or Scissor").toLowerCase();
-    if (choice == "rock" || choice == "paper" || choice == "scissor"){
-        return choice;
-    }
-    else {
-        alert ("Wrong input!");
-        return undefined;
-    }
-    
-}
-
-function showFinalScores() {
-    alert (`FINAL SCORE: Computer - ${computerScore}, Player - ${playerScore}`);
-    if (playerScore == computerScore){
-        alert ("It's a draw after five rounds!");
-    }
-
-    else if (playerScore < computerScore){
-        alert ("Sorry, you lose after five rounds!");
-    }
-
-    else {
-        alert ("Congratulations, you win after five rounds!");
+function playRound(){
+    const buttonsList = document.querySelectorAll("button");
+    for (let b of buttonsList){
+        b.addEventListener("click",roundEvaluation);
     }
 }
-
-
-function roundEvaluation(computerSelection, playerSelection) {
-    
+/**
+ * 
+ * @param {Event} event 
+ */
+function roundEvaluation(event) {
+    computerSelection = getComputerChoice();
+    playerSelection = event.currentTarget.textContent;
+    const finalResult = document.querySelector("#result");
     if (computerSelection == playerSelection){
-        alert ("Bingo! That's a draw.");
+        finalResult.textContent = "Bingo! That's a draw.";
     }
 
-    else if (computerSelection == "rock") {
-        if (playerSelection == "paper"){
-            alert ("You win! Paper beats Rock");
+    else if (computerSelection == "Rock") {
+        if (playerSelection == "Paper"){
+            finalResult.textContent = "You win! Paper beats Rock";
             playerScore++;
         }
-        else if (playerSelection == "scissor") {
-            alert ("You lose! Rock beats scissor");
+        else if (playerSelection == "Scissor") {
+            finalResult.textContent = "You lose! Rock beats scissor";
             computerScore++;
         }
     }
 
-    else if (computerSelection == "paper") {
-        if (playerSelection == "rock"){
-            alert ("You lose! Paper beats Rock");
+    else if (computerSelection == "Paper") {
+        if (playerSelection == "Rock"){
+            finalResult.textContent = "You lose! Paper beats Rock";
             computerScore++;
         }
-        else if (playerSelection == "scissor"){
-            alert ("You win! Scissor beats Paper");
+        else if (playerSelection == "Scissor"){
+            finalResult.textContent = "You win! Scissor beats Paper";
             playerScore++;
         }
     }
 
-    else if (computerSelection == "rock"){
-        if (playerSelection == "paper"){
-            alert ("You win! Paper beats Rock");
+    else if (computerSelection == "Scissor"){
+        if (playerSelection == "Paper"){
+            finalResult.textContent =  "You win! Paper beats Scissor";
             playerScore++;
         }
-        else if (playerSelection == "scissor"){
-            alert ("You lose! Rock beats scissor");
+        else if (playerSelection == "Rock"){
+            finalResult.textContent =  "You lose! Rock beats Scissor";
             computerScore++;
         }
     }
 
+    if (playerScore == 5){
+        document.querySelector("#result").textContent = `GAME ENDS.You win with ${playerScore} points!`;
+    }
+    else if (computerScore == 5){
+        document.querySelector("#result").textContent = `GAME ENDS.Computer wins with ${computerScore} points!`;
+    }
 }
-
-function gamePlay(){
-    for (i=0;i<5;i++){
-        roundEvaluation (getComputerChoice(),getUserChoice());
-    }
-    showFinalScores();
-}
-
-let playerScore = 0;
-let computerScore = 0;
-gamePlay();
